@@ -1,0 +1,21 @@
+{
+  "name": "@yoo-babobo/dbf.js",
+  "version": "1.0.0",
+  "description": "A small framework for Discord,js bots.",
+  "main": "dbf.js",
+  "scripts": {
+    "deploy": "npm publish --access public"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yoo-Babobo/dbf.js.git"
+  },
+  "author": "Yoo-Babobo",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "^0.0.1-security"
+  }
+}
