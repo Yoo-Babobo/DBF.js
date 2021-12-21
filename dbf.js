@@ -1,3 +1,8 @@
+/**
+ * Made by The Yule (theyule.xyz) at Yoo-Babobo (yoo-babobo.com).
+ * A Discord bot library to make development of a bot a little bit easier.
+ */
+
 "use strict";
 
 const fs = require("fs");
@@ -8,7 +13,7 @@ const fs = require("fs");
 class DiscordBot {
     /**
      * Constructor for creating a Discord bot
-     * @param {object} data 
+     * @param {Object} data All the data that the library needs to function
      * @returns {DiscordBot} Discord bot
      */
     constructor(data = {
@@ -21,7 +26,7 @@ class DiscordBot {
          */
         restApi: null,
         /**
-         * Discord client `IGNORE THIS`
+         * Discord client. Used to access the bot itself
          */
         client: null,
         /**
@@ -33,7 +38,7 @@ class DiscordBot {
          */
         token: "",
         /**
-         * Discord bot prefixes. Defaults to `!`
+         * Discord bot prefixes. Defaults to `!`. Note that this *is* an array, so you can have multiple prefixes
          */
         prefixes: ["!"],
         /**
@@ -41,7 +46,7 @@ class DiscordBot {
          */
         owners: [],
         /** 
-         * Discord bot blocked users
+         * Discord bot blocked users. **This feature is currently broken**
          */
         blockedUsers: [],
         /**
@@ -179,7 +184,7 @@ class DiscordBot {
          */
         this.discord = data.discordApi || null;
         /**
-         * Discord client `IGNORE THIS`
+         * Discord client. Used to access the bot itself
          */
         this.client = new this.discord.Client(data.clientOptions || []);
         /**
@@ -191,9 +196,206 @@ class DiscordBot {
          */
         this.data = data || {};
         /**
-         * Discord client options. Discord client intents are required
+         * Discord client options. Discord client intents are required for v13 and higher
          */
         this.options = data.clientOptions || [];
+        /**
+         * Discord bot responce functions. Example:
+         * ```javascript
+         * const bot = new DiscordBot({ data });
+         * 
+         * bot.client.on("messageCreate", message => {
+         *      bot.responces.command_unknown(message, {
+         *          command_name: "command",
+         *          prefix: "!"
+         *      });
+         * });
+         * ```
+         */
+        this.responces = {
+            /**
+             * Unknown command responce
+             * @param {Message} message Class with data from the message
+             * @param {Object} data Object with data for the responce
+             * @returns {Promise<Message>} The sent message
+             */
+            command_unknown: (message, data) => {
+                const msg = this.data.responces.command_unknown[Math.floor(Math.random() * this.data.responces.command_unknown.length)]
+                    .replace(/{{command}}/g, data.command_name)
+                    .replace(/{{prefix}}/g, data.prefix);
+
+                const embed = new this.discord.MessageEmbed()
+                    .setColor("RED")
+                    .setTitle("Unknown Command")
+                    .setDescription(msg);
+                
+                return message.channel.send({ embeds: [embed] });
+            },
+            /**
+             * Error command responce
+             * @param {Message} message Class with data from the message
+             * @param {Object} data Object with data for the responce
+             * @returns {Promise<Message>} The sent message
+             */
+            command_error: (message, data) => {
+                const msg = this.data.responces.command_error[Math.floor(Math.random() * this.data.responces.command_error.length)]
+                    .replace(/{{error}}/g, data.error)
+                    .replace(/{{author}}/g, message.author.username)
+                    .replace(/{{command}}/g, data.command_name);
+                
+                const embed = new this.discord.MessageEmbed()
+                    .setColor("RED")
+                    .setTitle("Error")
+                    .setDescription(msg);
+                
+                return message.channel.send({ embeds: [embed] });
+            },
+            /**
+             * Cooldown command responce
+             * @param {Message} message Class with data from the message
+             * @param {Object} data Object with data for the responce
+             * @returns {Promise<Message>} The sent message
+             */
+            command_cooldown: (message, data) => {
+                const msg = this.data.responces.command_cooldown[Math.floor(Math.random() * this.data.responces.command_cooldown.length)]
+                    .replace(/{{s}}/g, data.s)
+                    .replace(/{{cooldown}}/g, data.time_left)
+                    .replace(/{{author}}/g, message.author.username)
+                    .replace(/{{command}}/g, data.command_name);
+                
+                const embed = new this.discord.MessageEmbed()
+                    .setColor("RED")
+                    .setDescription(msg);
+                
+                return message.channel.send({ embeds: [embed] });
+            },
+            /**
+             * Guild-only command responce
+             * @param {Message} message Class with data from the message
+             * @param {Object} data Object with data for the responce
+             * @returns {Promise<Message>} The sent message
+             */
+            command_guild_only: (message, data) => {
+                const msg = this.data.responces.command_guild_only[Math.floor(Math.random() * this.data.responces.command_guild_only.length)]
+                    .replace(/{{author}}/g, message.author.username)
+                    .replace(/{{command}}/g, data.command_name);
+
+                const embed = new this.discord.MessageEmbed()
+                    .setColor("RED")
+                    .setDescription(msg);
+                
+                return message.channel.send({ embeds: [embed] });
+            },
+            /**
+             * Dms-only command responce
+             * @param {Message} message Class with data from the message
+             * @param {Object} data Object with data for the responce
+             * @returns {Promise<Message>} The sent message
+             */
+            command_dms_only: (message, data) => {
+                const msg = this.data.responces.command_dms_only[Math.floor(Math.random() * this.data.responces.command_dms_only.length)]
+                    .replace(/{{author}}/g, message.author.username)
+                    .replace(/{{command}}/g, data.command_name);
+
+                const embed = new this.discord.MessageEmbed()
+                    .setColor("RED")
+                    .setDescription(msg);
+                
+                return message.channel.send({ embeds: [embed] });
+            },
+            /**
+             * Owners-only command responce
+             * @param {Message} message Class with data from the message
+             * @param {Object} data Object with data for the responce
+             * @returns {Promise<Message>} The sent message
+             */
+            command_owners_only: (message, data) => {
+                const msg = this.data.responces.command_owners_only[Math.floor(Math.random() * this.data.responces.command_owners_only.length)]
+                    .replace(/{{s}}/g, data.s)
+                    .replace(/{{author}}/g, message.author.username)
+                    .replace(/{{command}}/g, data.command_name);
+
+                const embed = new this.discord.MessageEmbed()
+                    .setColor("RED")
+                    .setDescription(msg);
+                
+                return message.channel.send({ embeds: [embed] });
+            },
+            /**
+             * Blocked command responce
+             * @param {Message} message Class with data from the message
+             * @param {Object} data Object with data for the responce
+             * @returns {Promise<Message>} The sent message
+             */
+            command_blocked: (message, data) => {
+                const msg = this.data.responces.command_blocked[Math.floor(Math.random() * this.data.responces.command_blocked.length)]
+                    .replace(/{{author}}/g, message.author.username)
+                    .replace(/{{command}}/g, data.command_name);
+                
+                const embed = new this.discord.MessageEmbed()
+                    .setColor("RED")
+                    .setTitle("Blocked")
+                    .setDescription(msg);
+                
+                return message.channel.send({ embeds: [embed] });
+            },
+            /**
+             * No permission command responce
+             * @param {Message} message Class with data from the message
+             * @param {Object} data Object with data for the responce
+             * @returns {Promise<Message>} The sent message
+             */
+            command_no_permission: (message, data) => {
+                const msg = this.data.responces.command_no_permission[Math.floor(Math.random() * this.data.responces.command_no_permission.length)]
+                    .replace(/{{permissions}}/g, data.permissions)
+                    .replace(/{{s}}/g, data.s)
+                    .replace(/{{author}}/g, message.author.username)
+                    .replace(/{{command}}/g, data.command_name);
+                
+                const embed = new this.discord.MessageEmbed()
+                    .setColor("RED")
+                    .setDescription(msg);
+                
+                return message.channel.send({ embeds: [embed] });
+            },
+            /**
+             * No bot permission command responce
+             * @param {Message} message Class with data from the message
+             * @param {Object} data Object with data for the responce
+             * @returns {Promise<Message>} The sent message
+             */
+            command_no_bot_permission: (message, data) => {
+                const msg = this.data.responces.command_no_bot_permission[Math.floor(Math.random() * this.data.responces.command_no_bot_permission.length)]
+                    .replace(/{{permissions}}/g, data.permissions)
+                    .replace(/{{s}}/g, data.s)
+                    .replace(/{{author}}/g, message.author.username)
+                    .replace(/{{command}}/g, data.command_name);
+                
+                const embed = new this.discord.MessageEmbed()
+                    .setColor("RED")
+                    .setDescription(msg);
+                
+                return message.channel.send({ embeds: [embed] });
+            },
+            /**
+             * Incorrect command usage responce
+             * @param {Message} message Class with data from the message
+             * @param {Object} data Object with data for the responce
+             * @returns {Promise<Message>} The sent message
+             */
+            command_incorrect_usage: (message, data) => {
+                const msg = this.data.responces.command_incorrect_usage[Math.floor(Math.random() * this.data.responces.command_incorrect_usage.length)]
+                    .replace(/{{usage}}/g, data.usage)
+                    .replace(/{{author}}/g, message.author.username)
+                    .replace(/{{command}}/g, data.command_name);
+                
+                const embed = new this.discord.MessageEmbed()
+                    .setColor("RED")
+                    .setDescription(msg);
+                
+                return message.channel.send({ embeds: [embed] });
+            }
+        };
         
         this.client.once("ready", () => this.__ready());
         this.client.on("messageCreate", message => this.__message(message));
@@ -204,11 +406,11 @@ class DiscordBot {
 
     /**
      * Logs a message to the console. Useful only for this class. Use console.log instead
-     * @param {...string} message Message to log
+     * @param {...String} message Message to log
      * @returns {DiscordBot} Discord bot
      */
     __log(...message) {
-        if (this.data.dev && (typeof this.data.logging === "undefined" ? true : this.data.logging)) console.log("DBF => " + message.join(" "));
+        if (this.data.dev && (typeof this.data.logging === "undefined" ? true : this.data.logging)) console.log("[DBF] => " + message.join(" "));
         return this;
     }
 
@@ -231,6 +433,19 @@ class DiscordBot {
     }
 
     /**
+     * Gets the first user mentioned in a message
+     * @param {String} message Message to parse the mentions
+     * @returns {User} Mentioned user
+     */
+    getUserFromMessage(message) {
+        const matches = message.match(this.discord.MessageMentions.USERS_PATTERN);
+        if (!matches) return;
+
+        const id = matches[0].replace(/[^0-9]/g, "");
+        return this.client.users.cache.get(id);
+    }
+
+    /**
      * Callback for when the `ready` event is triggered on the bot
      */
     onready() {}
@@ -246,54 +461,24 @@ class DiscordBot {
         this.__registerEvents((this.data.path || ".") + "/" + (this.data.eventsPath || "events"));
         this.__registerButtons((this.data.path || ".") + "/" + (this.data.buttonsPath || "buttons"));
         this.__registerSelectMenus((this.data.path || ".") + "/" + (this.data.selectMenusPath || "selects"));
-        this.__deployCommands((this.data.path || ".") + "/" + (this.data.slashPath || "slash"), this.data.restApi || null, this.data.version || "9", this.data.dev || false, this.data.devId || "")
-        console.log("\nDBF => Bot (" + this.client.user.username + ") has successfully started\n");
+        this.__deployCommands((this.data.path || ".") + "/" + (this.data.slashPath || "slash"), this.data.restApi || null, this.data.version || "9", this.data.dev || false, this.data.devId || "");
+        console.log("\n[DBF] => Bot (" + this.client.user.username + ") has successfully started\n");
     }
 
     /**
      * Callback for when the `messageCreate` event is triggered on the bot
-     * @param {object} message Message object
+     * @param {Message} message Message class
      */
     onmessage(message) {}
 
     /**
      * This is the internal `messageCreate` callback for the bot. Do not re-assign. Re-assign `onmessage()` instead
-     * @param {object} message Object with data from the message
+     * @param {Message} message Class with data from the message
      */
     __message(message) {
         this.onmessage(message);
 
         const client = message.client;
-        const responces = this.data.responces || {
-            "command_unknown": [
-                "This command doesn't exist"
-            ],
-            "command_error": [
-                "Something went wrong: ```{{error}}```"
-            ],
-            "command_cooldown": [
-                "Please wait `{{cooldown}}` second{{s}} before using this command again"
-            ],
-            "command_guild_only": [
-                "This command can only be used in a server"
-            ],
-            "command_dms_only": [
-                "This command can only be used in DMs"
-            ],
-            "command_owners_only": [
-                "Only bot owners can use this command"
-            ],
-            "command_no_permission": [
-                "You don't have permission to use this command"
-            ],
-            "command_no_bot_permission": [
-                "I don't have permission to use this command"
-            ],
-            "command_incorrect_usage": [
-                "Please use this command correctly: `{{usage}}`"
-            ]
-        };
-
         var command_name = "";
 
         try {
@@ -307,22 +492,14 @@ class DiscordBot {
             const raw_args = message.content.slice(prefix.length).trim().split(/ +/);
             command_name = raw_args.shift().toLowerCase();
             const args = raw_args.slice(0);
-            var embed;
-            var msg;
     
             if (command_name === "" || command_name === null) return;
     
             if (!client.commands.has(command_name)) {
-                msg = responces.command_unknown[Math.floor(Math.random() * responces.command_unknown.length)]
-                    .replace(/{{command}}/g, command_name)
-                    .replace(/{{prefix}}/g, prefix);
-    
-                embed = new this.discord.MessageEmbed()
-                    .setColor("RED")
-                    .setTitle("Unknown Command")
-                    .setDescription(msg);
-                
-                return message.channel.send({ embeds: [embed] });
+                return this.responces.command_unknown(message, {
+                    command_name,
+                    prefix
+                });
             }
     
             var owner = false;
@@ -339,16 +516,7 @@ class DiscordBot {
             // TODO this doesn't work... SO MAKE IT WORK
             if (this.data.blockedUsers.includes(message.author.id) || command.blockedUsers.includes(message.author.id)) {
                 if (!command.unblockedUsers.includes(message.author.id)) {
-                    msg = responces.command_blocked[Math.floor(Math.random() * responces.command_blocked.length)]
-                        .replace(/{{author}}/g, message.author.username)
-                        .replace(/{{command}}/g, command_name);
-                    
-                    embed = new this.discord.MessageEmbed()
-                        .setColor("RED")
-                        .setTitle("Blocked")
-                        .setDescription(msg);
-                    
-                    return message.channel.send({ embeds: [embed] });
+                    return this.responces.command_blocked(message, { command_name });
                 }
             }
     
@@ -361,114 +529,61 @@ class DiscordBot {
             if (timestamps.has(message.author.id)) {
                 const expiration_time = timestamps.get(message.author.id) + cooldown_amount;
                 if (now < expiration_time) {
-                    const timeLeft = (expiration_time - now) / 1000;
-                    msg = responces.command_cooldown[Math.floor(Math.random() * responces.command_cooldown.length)]
-                        .replace(/{{s}}/g, s(parseFloat(timeLeft.toFixed(1))))
-                        .replace(/{{cooldown}}/g, timeLeft.toFixed(1).replace("0.", ".").replace(".0", ""))
-                        .replace(/{{author}}/g, message.author.username)
-                        .replace(/{{command}}/g, command_name);
-                    
-                    embed = new this.discord.MessageEmbed()
-                        .setColor("RED")
-                        .setDescription(msg);
-                    
-                    return message.channel.send({ embeds: [embed] });
+                    const time_left = (expiration_time - now) / 1000;
+
+                    return this.responces.command_cooldown(message, {
+                        s: s(parseFloat(time_left.toFixed(1))),
+                        time_left: time_left.toFixed(1).replace("0.", ".").replace(".0", ""),
+                        command_name
+                    })
                 }
             }
     
-            if (command.guildOnly && message.channel.type !== "text") {
-                msg = responces.command_guild_only[Math.floor(Math.random() * responces.command_guild_only.length)]
-                    .replace(/{{author}}/g, message.author.username)
-                    .replace(/{{command}}/g, command_name);
-    
-                embed = new this.discord.MessageEmbed()
-                    .setColor("RED")
-                    .setDescription(msg);
-                
-                return message.channel.send({ embeds: [embed] });
-            }
-    
-            if (command.dmsOnly && message.channel.type !== "dm") {
-                msg = responces.command_dms_only[Math.floor(Math.random() * responces.command_dms_only.length)]
-                    .replace(/{{author}}/g, message.author.username)
-                    .replace(/{{command}}/g, command_name);
-    
-                embed = new this.discord.MessageEmbed()
-                    .setColor("RED")
-                    .setDescription(msg);
-                
-                return message.channel.send({ embeds: [embed] });
-            }
+            if (command.guildOnly && message.channel.type !== "text") return this.responces.command_guild_only(message, { command_name });
+            if (command.dmsOnly && message.channel.type !== "dm") return this.responces.command_dms_only(message, { command_name });
     
             if (command.ownersOnly && !owner) {
-                msg = responces.command_owners_only[Math.floor(Math.random() * responces.command_owners_only.length)]
-                    .replace(/{{s}}/g, s(owners.length))
-                    .replace(/{{author}}/g, message.author.username)
-                    .replace(/{{command}}/g, command_name);
-    
-                embed = new this.discord.MessageEmbed()
-                    .setColor("RED")
-                    .setDescription(msg);
-                
-                return message.channel.send({ embeds: [embed] });
+                return this.responces.command_owners_only(message, {
+                    s: s(this.data.owners.length),
+                    command_name
+                });
             }
     
             if (command.permissions) {
                 const author_perms = message.channel.permissionsFor(message.author);
+
                 if (!author_perms || !author_perms.has(command.permissions) || !author_perms.has("ADMINISTRATOR")) {
-                    if (Array.isArray(command.permissions)) msg = responces.command_no_permission[Math.floor(Math.random() * responces.command_no_permission.length)]
-                        .replace(/{{permissions}}/g, command.permissions.join(", ").toUpperCase())
-                        .replace(/{{s}}/g, s(command.permissions.length))
-                        .replace(/{{author}}/g, message.author.username)
-                        .replace(/{{command}}/g, command_name);
-                    else msg = responces.command_no_permission[Math.floor(Math.random() * responces.command_no_permission.length)]
-                        .replace(/{{permissions}}/g, command.permissions.toUpperCase())
-                        .replace(/{{s}}/g, "s")
-                        .replace(/{{author}}/g, message.author.username)
-                        .replace(/{{command}}/g, command_name);
-                    
-                    embed = new this.discord.MessageEmbed()
-                        .setColor("RED")
-                        .setDescription(msg);
-                    
-                    return message.channel.send({ embeds: [embed] });
+                    const array = Array.isArray(command.permissions);
+
+                    return this.responces.command_no_permission(message, {
+                        permissions: (array ? command.permissions.join(", ") : command.permissions).toUpperCase(),
+                        s: array ? s(command.permissions.length) : "",
+                        command_name
+                    });
                 }
             }
     
             if (command.botPermissions) {
                 const bot_perms = message.channel.permissionsFor(message.client.user);
+
                 if (!bot_perms || !bot_perms.has(command.botPermissions) || !bot_perms.has("ADMINISTRATOR")) {
-                    if (Array.isArray(command.botPermissions)) msg = responces.command_no_bot_permission[Math.floor(Math.random() * responces.command_no_bot_permission.length)]
-                        .replace(/{{permissions}}/g, command.botPermissions.join(", ").toUpperCase())
-                        .replace(/{{s}}/g, s(command.botPermissions.length))
-                        .replace(/{{author}}/g, message.author.username)
-                        .replace(/{{command}}/g, command_name);
-                    else msg = responces.command_no_bot_permission[Math.floor(Math.random() * responces.command_no_bot_permission.length)]
-                        .replace(/{{permissions}}/g, command.botPermissions.toUpperCase())
-                        .replace(/{{s}}/g, "s")
-                        .replace(/{{author}}/g, message.author.username)
-                        .replace(/{{command}}/g, command_name);
-                    
-                    embed = new this.discord.MessageEmbed()
-                        .setColor("RED")
-                        .setDescription(msg);
-                    
-                    return message.channel.send({ embeds: [embed] });
+                    const array = Array.isArray(command.botPermissions);
+
+                    return this.responces.command_no_bot_permission(message, {
+                        permissions: (array ? command.botPermissions.join(", ") : command.botPermissions).toUpperCase(),
+                        s: array ? s(command.botPermissions.length) : "",
+                        command_name
+                    });
                 }
             }
     
-            if (num_args != args.length) {
-                var result = command.usage ? " " + command.usage : num_args === 0 ? "" : " <" + num_args + " required argument" + s(num_args) + ">";
-                msg = responces.command_incorrect_usage[Math.floor(Math.random() * responces.command_incorrect_usage.length)]
-                    .replace(/{{usage}}/g, prefix + command_name + result)
-                    .replace(/{{author}}/g, message.author.username)
-                    .replace(/{{command}}/g, command_name);
+            if (num_args !== args.length && num_args !== 0) {
+                const result = command.usage ? " " + command.usage : num_args === 0 ? "" : " <" + num_args + " required argument" + s(num_args) + ">";
                 
-                embed = new this.discord.MessageEmbed()
-                    .setColor("RED")
-                    .setDescription(msg);
-                
-                return message.channel.send({ embeds: [embed] });
+                return this.responces.command_incorrect_usage(message, {
+                    usage: prefix + command_name + result,
+                    command_name
+                });
             }
     
             timestamps.set(message.author.id, now);
@@ -476,30 +591,23 @@ class DiscordBot {
     
             command.execute(message, args);
         } catch (error) {
-            console.error(error)
-            msg = responces.command_error[Math.floor(Math.random() * responces.command_error.length)]
-                .replace(/{{error}}/g, error)
-                .replace(/{{author}}/g, message.author.username)
-                .replace(/{{command}}/g, command_name);
-            
-            embed = new this.discord.MessageEmbed()
-                .setColor("RED")
-                .setTitle("Error")
-                .setDescription(msg);
-            
-            return message.channel.send({ embeds: [embed] });
+            console.error(error);
+            return this.responces.command_error(message, {
+                error,
+                command_name
+            });
         }
     }
 
     /**
      * Callback for when the `interactionCreate` event is triggered on the bot
-     * @param {object} interaction Interaction object
+     * @param {Integration} interaction Interaction class
      */
     oninteraction(interaction) {}
 
     /**
      * This is the internal `interactionCreate` callback for the bot. Do not re-assign. Re-assign `oninteraction()` instead
-     * @param {object} interaction Object with data from the interaction
+     * @param {Integration} interaction Class with data from the interaction
      */
     async __interaction(interaction) {
         this.oninteraction(interaction);
@@ -563,7 +671,7 @@ class DiscordBot {
 
     /**
      * Internal function for loading commands from their files
-     * @param {string} path Path to commands folder. Defaults to `./commands`
+     * @param {String} path Path to commands folder. Defaults to `./commands`
      * @returns {DiscordBot} Discord bot
      */
     __loadCommands(path = "./commands") {
@@ -592,7 +700,7 @@ class DiscordBot {
 
     /**
      * Internal function for loading events from their files
-     * @param {string} path Path to events folder. Defaults to `./events`
+     * @param {String} path Path to events folder. Defaults to `./events`
      * @returns {DiscordBot} Discord bot
      */
     __registerEvents(path = "./events") {
@@ -619,7 +727,7 @@ class DiscordBot {
 
     /**
      * Internal function for loading buttons from their files
-     * @param {string} path Path to buttons folder. Defaults to `./buttons`
+     * @param {String} path Path to buttons folder. Defaults to `./buttons`
      * @returns {DiscordBot} Discord bot
      */
      __registerButtons(path = "./buttons") {
@@ -647,7 +755,7 @@ class DiscordBot {
 
     /**
      * Internal function for loading select menus from their files
-     * @param {string} path Path to select menus folder. Defaults to `./selects`
+     * @param {String} path Path to select menus folder. Defaults to `./selects`
      * @returns {DiscordBot} Discord bot
      */
      __registerSelectMenus(path = "./selects") {
@@ -675,11 +783,11 @@ class DiscordBot {
 
     /**
      * Internal function for loading slash commands from their files
-     * @param {string} path Path to slash commands folder. Defaults to `./slash`
+     * @param {String} path Path to slash commands folder. Defaults to `./slash`
      * @param {Function} rest Rest API
-     * @param {version} version Rest API version to use. Defaults to `9` (current)
-     * @param {boolean} dev Discord bot development. Defaults to `true`
-     * @param {string} devId Discord bot guild id
+     * @param {String} version Rest API version to use. Defaults to `9` (current)
+     * @param {Boolean} dev Discord bot development. Defaults to `true`
+     * @param {String} devId Discord bot guild id
      * @returns {DiscordBot} Discord bot
      */
     __deployCommands(path = "./slash", rest = null, version = "9", dev = true, devId = "") {

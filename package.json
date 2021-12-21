@@ -1,7 +1,7 @@
 {
   "name": "@yoo-babobo/dbf.js",
   "version": "1.0.0",
-  "description": "A small framework for Discord,js bots.",
+  "description": "A Discord bot library to make development of a bot a little bit easier.",
   "main": "dbf.js",
   "scripts": {
     "deploy": "npm publish --access public"
