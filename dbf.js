@@ -1,6 +1,6 @@
 /**
  * Made by The Yule (theyule.xyz) at Yoo-Babobo (yoo-babobo.com).
- * A Discord bot library to make development of a bot a little bit easier.
+ * A Discord bot library to make the development of a bot a little bit easier.
  */
 
 "use strict";
