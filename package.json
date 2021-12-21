@@ -7,7 +7,7 @@
     "deploy": "npm publish --access public"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.com"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "discord-bot-framework"
   ],
   "author": "Yoo-Babobo",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Yoo-Babobo/DBF.js/issues"
   },
