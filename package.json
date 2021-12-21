@@ -1,6 +1,6 @@
 {
   "name": "@yoo-babobo/dbf.js",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A Discord bot library to make the development of a bot a little bit easier.",
   "main": "dbf.js",
   "scripts": {
@@ -13,8 +13,18 @@
     "type": "git",
     "url": "https://github.com/Yoo-Babobo/dbf.js.git"
   },
+  "keywords": [
+    "discord",
+    "discordjs",
+    "discord-bot",
+    "discord-bot-framework"
+  ],
   "author": "Yoo-Babobo",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yoo-Babobo/dbf.js/issues"
+  },
+  "homepage": "https://github.com/Yoo-Babobo/dbf.js",
   "dependencies": {
     "fs": "^0.0.1-security"
   }
