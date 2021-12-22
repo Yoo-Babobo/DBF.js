@@ -72,7 +72,7 @@ class DiscordBot {
          */
         statusInterval: 15000,
         /**
-         * Discord bot responces. Defaults to:
+         * Discord bot responses. Defaults to:
          * ```json
          * "command_unknown": [
                 "This command doesn't exist"
@@ -106,7 +106,7 @@ class DiscordBot {
             ]
          * ```
          */
-        responces: {
+        responses: {
             "command_unknown": [
                 "This command doesn't exist"
             ],
@@ -205,14 +205,14 @@ class DiscordBot {
          * const bot = new DiscordBot({ data });
          * 
          * bot.client.on("messageCreate", message => {
-         *      bot.responces.command_unknown(message, {
+         *      bot.responses.command_unknown(message, {
          *          command_name: "command",
          *          prefix: "!"
          *      });
          * });
          * ```
          */
-        this.responces = {
+        this.responses = {
             /**
              * Unknown command responce
              * @param {Message} message Class with data from the message
@@ -220,7 +220,7 @@ class DiscordBot {
              * @returns {Promise<Message>} The sent message
              */
             command_unknown: (message, data) => {
-                const msg = this.data.responces.command_unknown[Math.floor(Math.random() * this.data.responces.command_unknown.length)]
+                const msg = this.data.responses.command_unknown[Math.floor(Math.random() * this.data.responses.command_unknown.length)]
                     .replace(/{{command}}/g, data.command_name)
                     .replace(/{{prefix}}/g, data.prefix);
 
@@ -238,7 +238,7 @@ class DiscordBot {
              * @returns {Promise<Message>} The sent message
              */
             command_error: (message, data) => {
-                const msg = this.data.responces.command_error[Math.floor(Math.random() * this.data.responces.command_error.length)]
+                const msg = this.data.responses.command_error[Math.floor(Math.random() * this.data.responses.command_error.length)]
                     .replace(/{{error}}/g, data.error)
                     .replace(/{{author}}/g, message.author.username)
                     .replace(/{{command}}/g, data.command_name);
@@ -257,7 +257,7 @@ class DiscordBot {
              * @returns {Promise<Message>} The sent message
              */
             command_cooldown: (message, data) => {
-                const msg = this.data.responces.command_cooldown[Math.floor(Math.random() * this.data.responces.command_cooldown.length)]
+                const msg = this.data.responses.command_cooldown[Math.floor(Math.random() * this.data.responses.command_cooldown.length)]
                     .replace(/{{s}}/g, data.s)
                     .replace(/{{cooldown}}/g, data.time_left)
                     .replace(/{{author}}/g, message.author.username)
@@ -276,7 +276,7 @@ class DiscordBot {
              * @returns {Promise<Message>} The sent message
              */
             command_guild_only: (message, data) => {
-                const msg = this.data.responces.command_guild_only[Math.floor(Math.random() * this.data.responces.command_guild_only.length)]
+                const msg = this.data.responses.command_guild_only[Math.floor(Math.random() * this.data.responses.command_guild_only.length)]
                     .replace(/{{author}}/g, message.author.username)
                     .replace(/{{command}}/g, data.command_name);
 
@@ -293,7 +293,7 @@ class DiscordBot {
              * @returns {Promise<Message>} The sent message
              */
             command_dms_only: (message, data) => {
-                const msg = this.data.responces.command_dms_only[Math.floor(Math.random() * this.data.responces.command_dms_only.length)]
+                const msg = this.data.responses.command_dms_only[Math.floor(Math.random() * this.data.responses.command_dms_only.length)]
                     .replace(/{{author}}/g, message.author.username)
                     .replace(/{{command}}/g, data.command_name);
 
@@ -310,7 +310,7 @@ class DiscordBot {
              * @returns {Promise<Message>} The sent message
              */
             command_owners_only: (message, data) => {
-                const msg = this.data.responces.command_owners_only[Math.floor(Math.random() * this.data.responces.command_owners_only.length)]
+                const msg = this.data.responses.command_owners_only[Math.floor(Math.random() * this.data.responses.command_owners_only.length)]
                     .replace(/{{s}}/g, data.s)
                     .replace(/{{author}}/g, message.author.username)
                     .replace(/{{command}}/g, data.command_name);
@@ -328,7 +328,7 @@ class DiscordBot {
              * @returns {Promise<Message>} The sent message
              */
             command_blocked: (message, data) => {
-                const msg = this.data.responces.command_blocked[Math.floor(Math.random() * this.data.responces.command_blocked.length)]
+                const msg = this.data.responses.command_blocked[Math.floor(Math.random() * this.data.responses.command_blocked.length)]
                     .replace(/{{author}}/g, message.author.username)
                     .replace(/{{command}}/g, data.command_name);
                 
@@ -346,7 +346,7 @@ class DiscordBot {
              * @returns {Promise<Message>} The sent message
              */
             command_no_permission: (message, data) => {
-                const msg = this.data.responces.command_no_permission[Math.floor(Math.random() * this.data.responces.command_no_permission.length)]
+                const msg = this.data.responses.command_no_permission[Math.floor(Math.random() * this.data.responses.command_no_permission.length)]
                     .replace(/{{permissions}}/g, data.permissions)
                     .replace(/{{s}}/g, data.s)
                     .replace(/{{author}}/g, message.author.username)
@@ -365,7 +365,7 @@ class DiscordBot {
              * @returns {Promise<Message>} The sent message
              */
             command_no_bot_permission: (message, data) => {
-                const msg = this.data.responces.command_no_bot_permission[Math.floor(Math.random() * this.data.responces.command_no_bot_permission.length)]
+                const msg = this.data.responses.command_no_bot_permission[Math.floor(Math.random() * this.data.responses.command_no_bot_permission.length)]
                     .replace(/{{permissions}}/g, data.permissions)
                     .replace(/{{s}}/g, data.s)
                     .replace(/{{author}}/g, message.author.username)
@@ -384,7 +384,7 @@ class DiscordBot {
              * @returns {Promise<Message>} The sent message
              */
             command_incorrect_usage: (message, data) => {
-                const msg = this.data.responces.command_incorrect_usage[Math.floor(Math.random() * this.data.responces.command_incorrect_usage.length)]
+                const msg = this.data.responses.command_incorrect_usage[Math.floor(Math.random() * this.data.responses.command_incorrect_usage.length)]
                     .replace(/{{usage}}/g, data.usage)
                     .replace(/{{author}}/g, message.author.username)
                     .replace(/{{command}}/g, data.command_name);
@@ -496,7 +496,7 @@ class DiscordBot {
             if (command_name === "" || command_name === null) return;
     
             if (!client.commands.has(command_name)) {
-                return this.responces.command_unknown(message, {
+                return this.responses.command_unknown(message, {
                     command_name,
                     prefix
                 });
@@ -516,7 +516,7 @@ class DiscordBot {
             // TODO this doesn't work... SO MAKE IT WORK
             if (this.data.blockedUsers.includes(message.author.id) || command.blockedUsers.includes(message.author.id)) {
                 if (!command.unblockedUsers.includes(message.author.id)) {
-                    return this.responces.command_blocked(message, { command_name });
+                    return this.responses.command_blocked(message, { command_name });
                 }
             }
     
@@ -531,7 +531,7 @@ class DiscordBot {
                 if (now < expiration_time) {
                     const time_left = (expiration_time - now) / 1000;
 
-                    return this.responces.command_cooldown(message, {
+                    return this.responses.command_cooldown(message, {
                         s: s(parseFloat(time_left.toFixed(1))),
                         time_left: time_left.toFixed(1).replace("0.", ".").replace(".0", ""),
                         command_name
@@ -539,11 +539,11 @@ class DiscordBot {
                 }
             }
     
-            if (command.guildOnly && message.channel.type !== "text") return this.responces.command_guild_only(message, { command_name });
-            if (command.dmsOnly && message.channel.type !== "dm") return this.responces.command_dms_only(message, { command_name });
+            if (command.guildOnly && message.channel.type !== "text") return this.responses.command_guild_only(message, { command_name });
+            if (command.dmsOnly && message.channel.type !== "dm") return this.responses.command_dms_only(message, { command_name });
     
             if (command.ownersOnly && !owner) {
-                return this.responces.command_owners_only(message, {
+                return this.responses.command_owners_only(message, {
                     s: s(this.data.owners.length),
                     command_name
                 });
@@ -555,7 +555,7 @@ class DiscordBot {
                 if (!author_perms || !author_perms.has(command.permissions) || !author_perms.has("ADMINISTRATOR")) {
                     const array = Array.isArray(command.permissions);
 
-                    return this.responces.command_no_permission(message, {
+                    return this.responses.command_no_permission(message, {
                         permissions: (array ? command.permissions.join(", ") : command.permissions).toUpperCase(),
                         s: array ? s(command.permissions.length) : "",
                         command_name
@@ -569,7 +569,7 @@ class DiscordBot {
                 if (!bot_perms || !bot_perms.has(command.botPermissions) || !bot_perms.has("ADMINISTRATOR")) {
                     const array = Array.isArray(command.botPermissions);
 
-                    return this.responces.command_no_bot_permission(message, {
+                    return this.responses.command_no_bot_permission(message, {
                         permissions: (array ? command.botPermissions.join(", ") : command.botPermissions).toUpperCase(),
                         s: array ? s(command.botPermissions.length) : "",
                         command_name
@@ -577,10 +577,10 @@ class DiscordBot {
                 }
             }
     
-            if (num_args !== args.length && num_args !== 0) {
+            if (num_args < args.length && num_args !== 0) {
                 const result = command.usage ? " " + command.usage : num_args === 0 ? "" : " <" + num_args + " required argument" + s(num_args) + ">";
                 
-                return this.responces.command_incorrect_usage(message, {
+                return this.responses.command_incorrect_usage(message, {
                     usage: prefix + command_name + result,
                     command_name
                 });
@@ -592,7 +592,7 @@ class DiscordBot {
             command.execute(message, args);
         } catch (error) {
             console.error(error);
-            return this.responces.command_error(message, {
+            return this.responses.command_error(message, {
                 error,
                 command_name
             });
@@ -612,7 +612,7 @@ class DiscordBot {
     async __interaction(interaction) {
         this.oninteraction(interaction);
 
-        const responces = this.data.responces;
+        const responses = this.data.responses;
 
         if (interaction.isCommand()) {
             const command = interaction.client.slash.get(interaction.commandName);
@@ -622,7 +622,7 @@ class DiscordBot {
             catch (error) {
                 console.error(error);
 
-                msg = responces.command_error[Math.floor(Math.random() * responces.command_error.length)]
+                msg = responses.command_error[Math.floor(Math.random() * responses.command_error.length)]
                     .replace(/{{error}}/g, error);
                 
                 embed = new this.discord.MessageEmbed()
@@ -646,7 +646,7 @@ class DiscordBot {
     }
 
     /**
-     * Internal function to set status(s) of the bot, selected randomly from `data.responces`
+     * Internal function to set status(s) of the bot, selected randomly from `data.responses`
      * @returns {DiscordBot} Discord bot
      */
     __status() {
