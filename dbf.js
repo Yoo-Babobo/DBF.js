@@ -577,7 +577,7 @@ class DiscordBot {
                 }
             }
     
-            if (num_args < args.length && num_args !== 0) {
+            if (num_args > args.length && num_args !== 0) {
                 const result = command.usage ? " " + command.usage : num_args === 0 ? "" : " <" + num_args + " required argument" + s(num_args) + ">";
                 
                 return this.responses.command_incorrect_usage(message, {

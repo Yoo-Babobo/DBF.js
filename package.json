@@ -1,6 +1,6 @@
 {
   "name": "@yoo-babobo/dbf.js",
-  "version": "1.0.3",
+  "version": "1.0.31",
   "description": "A Discord bot library to make the development of a bot a little bit easier.",
   "main": "dbf.js",
   "scripts": {
