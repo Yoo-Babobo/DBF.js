@@ -495,7 +495,7 @@ class DiscordBot {
     
             if (command_name === "" || command_name === null) return;
     
-            if (!client.commands.has(command_name)) {
+            if (!client.commands.has(command_name) && !client.aliases.has(command_name)) {
                 return this.responses.command_unknown(message, {
                     command_name,
                     prefix
@@ -505,7 +505,7 @@ class DiscordBot {
             var owner = false;
             for (const thisOwner of this.data.owners || []) if (message.author.id === thisOwner) owner = thisOwner;
             
-            const command = client.commands.get(command_name) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command_name));
+            const command = client.commands.get(command_name) || client.aliases.get(command_name);
             const num_args = command.args || 0;
             const { cooldowns } = client;
 
@@ -680,6 +680,7 @@ class DiscordBot {
         catch { return this; }
 
         this.client.commands = new this.discord.Collection();
+        this.client.aliases = new this.discord.Collection();
         this.client.cooldowns = new this.discord.Collection();
 
         if (files.length < 1) return this;
@@ -690,6 +691,7 @@ class DiscordBot {
             const command = require(path + "/" + file);
             this.__log("Registering command " + command.name);
             this.client.commands.set(command.name, command);
+            if (!!command.aliases) command.aliases.map(alias => this.client.aliases.set(alias, command));
             this.__log("Successfully registered command " + command.name);
         }
 
